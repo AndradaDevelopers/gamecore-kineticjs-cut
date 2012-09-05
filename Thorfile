@@ -5,7 +5,7 @@ class Build < Thor
   FILES = [
     "license.js", "src/Global.js", "src/Transition.js", "src/util/Type.js", "src/util/Canvas.js", "src/util/Tween.js", "src/util/Transform.js",
     "src/Animation.js", "src/Node.js", "src/Container.js", "src/Stage.js", "src/Layer.js", "src/Group.js", "src/Shape.js", 
-    "src/shapes/Image.js", "src/shapes/Text.js", "src/shapes/Sprite.js", "src/shapes/TextPath.js"       
+    "src/shapes/Image.js", "src/shapes/Circle.js", "src/shapes/Rect.js", "src/shapes/Text.js", "src/shapes/Sprite.js", "src/shapes/TextPath.js"       
   ]
   
   desc "dev", "Concatenate all the js files into /dist/kinetic-VERSION.js."
@@ -15,6 +15,7 @@ class Build < Thor
     
     puts ":: Deleting other development files..."
     Dir.foreach("dist") do |file|
+      puts ":: Building the file /#{file}..."
       if file.match(/.*[^(min)]\.js/)
         File.delete("dist/" + file)
       end

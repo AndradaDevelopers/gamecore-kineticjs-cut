@@ -268,12 +268,10 @@ Test.prototype.tests = {
         });
         var layer = new Kinetic.Layer();
 
-        var star = new Kinetic.Star({
+        var star = new Kinetic.Circle({
             x: 200,
             y: 100,
-            numPoints: 10,
-            innerRadius: 40,
-            outerRadius: 70,
+            radius: 40,
             fill: 'green',
             stroke: 'blue',
             strokeWidth: 5,
@@ -339,12 +337,10 @@ Test.prototype.tests = {
         var layer = new Kinetic.Layer({
             rotationDeg: 20
         });
-        var star = new Kinetic.Star({
+        var star = new Kinetic.Circle({
             x: 200,
             y: 100,
-            numPoints: 10,
-            innerRadius: 40,
-            outerRadius: 70,
+            radius: 70,
             fill: 'green',
             stroke: 'blue',
             strokeWidth: 20,
@@ -720,12 +716,10 @@ Test.prototype.tests = {
         });
         var layer = new Kinetic.Layer();
 
-        var star = new Kinetic.Star({
+        var star = new Kinetic.Circle({
             x: 200,
             y: 100,
-            numPoints: 5,
-            innerRadius: 40,
-            outerRadius: 70,
+            radius: 70,
             fill: 'green',
             stroke: 'blue',
             strokeWidth: 5,

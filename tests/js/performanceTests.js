@@ -91,7 +91,7 @@ Test.prototype.tests = {
                 var randX = Math.random() * stage.getWidth();
                 var randY = Math.random() * stage.getHeight();
                 
-                var circle = new Kinetic.Ellipse({
+                var circle = new Kinetic.Circle({
                     x: randX,
                     y: randY,
                     radius: 2,
@@ -221,13 +221,11 @@ Test.prototype.tests = {
 
         startTimer();
         for(var n = 0; n < 1000; n++) {
-            var star = new Kinetic.Star({
-                innerRadius: 20,
-                outerRadius: 50,
+            var star = new Kinetic.Circle({
+                radius: 50,
                 fill: 'yellow',
                 stroke: 'black',
                 strokeWidth: 5,
-                numPoints: 5,
                 x: Math.random() * stage.getWidth(),
                 y: Math.random() * stage.getHeight(),
                 shadow: {
@@ -243,7 +241,7 @@ Test.prototype.tests = {
 
         stage.add(layer);
 
-        endTimer('draw 1,000 stars');
+        endTimer('draw 1,000 circles');
     },
     'DRAWING - draw 1,000 cached stars': function(containerId) {
         var stage = new Kinetic.Stage({
@@ -253,13 +251,11 @@ Test.prototype.tests = {
         });
         var layer = new Kinetic.Layer();
 
-        var star = new Kinetic.Star({
-            innerRadius: 20,
-            outerRadius: 50,
+        var star = new Kinetic.Circle({
+            radius: 50,
             fill: 'yellow',
             stroke: 'black',
             strokeWidth: 5,
-            numPoints: 5,
             x: 70,
             y: 70,
             shadow: {
@@ -289,56 +285,8 @@ Test.prototype.tests = {
 
                 layer.draw();
 
-                endTimer('draw 1,000 cached stars');
+                endTimer('draw 1,000 cached circles');
             }
-        });
-    },
-    'PATH - add map path': function(containerId) {
-        startTimer();
-        var stage = new Kinetic.Stage({
-            container: containerId,
-            width: 1024,
-            height: 480,
-            throttle: 80,
-            scale: 0.5,
-            x: 50,
-            y: 10
-        });
-        var mapLayer = new Kinetic.Layer();
-
-        for(var key in worldMap.shapes) {
-            var c = worldMap.shapes[key];
-
-            var path = new Kinetic.Path({
-                data: c,
-                fill: '#ccc',
-                stroke: '#999',
-                strokeWidth: 1
-            });
-
-            if(key === 'US')
-                test(path.dataArray[0].command === 'M', 'first command should be a moveTo');
-
-            path.on('mouseover', function() {
-                this.setFill('red');
-                mapLayer.draw();
-            });
-
-            path.on('mouseout', function() {
-                this.setFill('#ccc');
-                mapLayer.draw();
-            });
-
-            mapLayer.add(path);
-        }
-
-        stage.add(mapLayer);
-
-        endTimer('time build and to draw map');
-
-        mapLayer.beforeDraw(startTimer);
-        mapLayer.afterDraw(function() {
-            endTimer('redraw layer');
         });
     }
 };

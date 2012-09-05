@@ -567,147 +567,7 @@ Kinetic.Canvas = gamecore.Base.extend("Kinetic.Canvas", {},
 */
 Kinetic.Tween = gamecore.Base.extend("Kinetic.Tween", 
     //Static properties
-    {
-        'back-ease-in': function(t, b, c, d, a, p) {
-            var s = 1.70158;
-            return c * (t /= d) * t * ((s + 1) * t - s) + b;
-        },
-        'back-ease-out': function(t, b, c, d, a, p) {
-            var s = 1.70158;
-            return c * (( t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-        },
-        'back-ease-in-out': function(t, b, c, d, a, p) {
-            var s = 1.70158;
-            if((t /= d / 2) < 1) {
-                return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-            }
-            return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
-        },
-        'elastic-ease-in': function(t, b, c, d, a, p) {
-            // added s = 0
-            var s = 0;
-            if(t === 0) {
-                return b;
-            }
-            if((t /= d) == 1) {
-                return b + c;
-            }
-            if(!p) {
-                p = d * 0.3;
-            }
-            if(!a || a < Math.abs(c)) {
-                a = c;
-                s = p / 4;
-            }
-            else {
-                s = p / (2 * Math.PI) * Math.asin(c / a);
-            }
-            return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-        },
-        'elastic-ease-out': function(t, b, c, d, a, p) {
-            // added s = 0
-            var s = 0;
-            if(t === 0) {
-                return b;
-            }
-            if((t /= d) == 1) {
-                return b + c;
-            }
-            if(!p) {
-                p = d * 0.3;
-            }
-            if(!a || a < Math.abs(c)) {
-                a = c;
-                s = p / 4;
-            }
-            else {
-                s = p / (2 * Math.PI) * Math.asin(c / a);
-            }
-            return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
-        },
-        'elastic-ease-in-out': function(t, b, c, d, a, p) {
-            // added s = 0
-            var s = 0;
-            if(t === 0) {
-                return b;
-            }
-            if((t /= d / 2) == 2) {
-                return b + c;
-            }
-            if(!p) {
-                p = d * (0.3 * 1.5);
-            }
-            if(!a || a < Math.abs(c)) {
-                a = c;
-                s = p / 4;
-            }
-            else {
-                s = p / (2 * Math.PI) * Math.asin(c / a);
-            }
-            if(t < 1) {
-                return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-            }
-            return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
-        },
-        'bounce-ease-out': function(t, b, c, d) {
-            if((t /= d) < (1 / 2.75)) {
-                return c * (7.5625 * t * t) + b;
-            }
-            else if(t < (2 / 2.75)) {
-                return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
-            }
-            else if(t < (2.5 / 2.75)) {
-                return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
-            }
-            else {
-                return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
-            }
-        },
-        'bounce-ease-in': function(t, b, c, d) {
-            return c - Kinetic.Tweens['bounce-ease-out'](d - t, 0, c, d) + b;
-        },
-        'bounce-ease-in-out': function(t, b, c, d) {
-            if(t < d / 2) {
-                return Kinetic.Tweens['bounce-ease-in'](t * 2, 0, c, d) * 0.5 + b;
-            }
-            else {
-                return Kinetic.Tweens['bounce-ease-out'](t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
-            }
-        },
-        // duplicate
-        /*
-         strongEaseInOut: function(t, b, c, d) {
-         return c * (t /= d) * t * t * t * t + b;
-         },
-         */
-        'ease-in': function(t, b, c, d) {
-            return c * (t /= d) * t + b;
-        },
-        'ease-out': function(t, b, c, d) {
-            return -c * (t /= d) * (t - 2) + b;
-        },
-        'ease-in-out': function(t, b, c, d) {
-            if((t /= d / 2) < 1) {
-                return c / 2 * t * t + b;
-            }
-            return -c / 2 * ((--t) * (t - 2) - 1) + b;
-        },
-        'strong-ease-in': function(t, b, c, d) {
-            return c * (t /= d) * t * t * t * t + b;
-        },
-        'strong-ease-out': function(t, b, c, d) {
-            return c * (( t = t / d - 1) * t * t * t * t + 1) + b;
-        },
-        'strong-ease-in-out': function(t, b, c, d) {
-            if((t /= d / 2) < 1) {
-                return c / 2 * t * t * t * t * t + b;
-            }
-            return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
-        },
-        'linear': function(t, b, c, d) {
-            return c * t / d + b;
-        }
-    }, 
+    {},
     //Instance methods
     {
         init: function(obj, propFunc, func, begin, finish, duration) {
@@ -893,7 +753,148 @@ Kinetic.Tween = gamecore.Base.extend("Kinetic.Tween",
     }
 );
 
-
+Kinetic.Tweens = 
+{
+    'back-ease-in': function(t, b, c, d, a, p) {
+        var s = 1.70158;
+        return c * (t /= d) * t * ((s + 1) * t - s) + b;
+    },
+    'back-ease-out': function(t, b, c, d, a, p) {
+        var s = 1.70158;
+        return c * (( t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+    },
+    'back-ease-in-out': function(t, b, c, d, a, p) {
+        var s = 1.70158;
+        if((t /= d / 2) < 1) {
+            return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+        }
+        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+    },
+    'elastic-ease-in': function(t, b, c, d, a, p) {
+        // added s = 0
+        var s = 0;
+        if(t === 0) {
+            return b;
+        }
+        if((t /= d) == 1) {
+            return b + c;
+        }
+        if(!p) {
+            p = d * 0.3;
+        }
+        if(!a || a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        }
+        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+    },
+    'elastic-ease-out': function(t, b, c, d, a, p) {
+        // added s = 0
+        var s = 0;
+        if(t === 0) {
+            return b;
+        }
+        if((t /= d) == 1) {
+            return b + c;
+        }
+        if(!p) {
+            p = d * 0.3;
+        }
+        if(!a || a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        }
+        return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
+    },
+    'elastic-ease-in-out': function(t, b, c, d, a, p) {
+        // added s = 0
+        var s = 0;
+        if(t === 0) {
+            return b;
+        }
+        if((t /= d / 2) == 2) {
+            return b + c;
+        }
+        if(!p) {
+            p = d * (0.3 * 1.5);
+        }
+        if(!a || a < Math.abs(c)) {
+            a = c;
+            s = p / 4;
+        }
+        else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
+        }
+        if(t < 1) {
+            return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+        }
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
+    },
+    'bounce-ease-out': function(t, b, c, d) {
+        if((t /= d) < (1 / 2.75)) {
+            return c * (7.5625 * t * t) + b;
+        }
+        else if(t < (2 / 2.75)) {
+            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
+        }
+        else if(t < (2.5 / 2.75)) {
+            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
+        }
+        else {
+            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
+        }
+    },
+    'bounce-ease-in': function(t, b, c, d) {
+        return c - Kinetic.Tweens['bounce-ease-out'](d - t, 0, c, d) + b;
+    },
+    'bounce-ease-in-out': function(t, b, c, d) {
+        if(t < d / 2) {
+            return Kinetic.Tweens['bounce-ease-in'](t * 2, 0, c, d) * 0.5 + b;
+        }
+        else {
+            return Kinetic.Tweens['bounce-ease-out'](t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
+        }
+    },
+    // duplicate
+    /*
+     strongEaseInOut: function(t, b, c, d) {
+     return c * (t /= d) * t * t * t * t + b;
+     },
+     */
+    'ease-in': function(t, b, c, d) {
+        return c * (t /= d) * t + b;
+    },
+    'ease-out': function(t, b, c, d) {
+        return -c * (t /= d) * (t - 2) + b;
+    },
+    'ease-in-out': function(t, b, c, d) {
+        if((t /= d / 2) < 1) {
+            return c / 2 * t * t + b;
+        }
+        return -c / 2 * ((--t) * (t - 2) - 1) + b;
+    },
+    'strong-ease-in': function(t, b, c, d) {
+        return c * (t /= d) * t * t * t * t + b;
+    },
+    'strong-ease-out': function(t, b, c, d) {
+        return c * (( t = t / d - 1) * t * t * t * t + 1) + b;
+    },
+    'strong-ease-in-out': function(t, b, c, d) {
+        if((t /= d / 2) < 1) {
+            return c / 2 * t * t * t * t * t + b;
+        }
+        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+    },
+    'linear': function(t, b, c, d) {
+        return c * t / d + b;
+    }
+};
 ///////////////////////////////////////////////////////////////////////
 //  Transform
 ///////////////////////////////////////////////////////////////////////
@@ -4470,6 +4471,162 @@ Kinetic.Node.addGettersSetters(Kinetic.Image, ['image', 'crop', 'filter', 'width
  * get height
  * @name getHeight
  * @methodOf Kinetic.Image.prototype
+ */
+///////////////////////////////////////////////////////////////////////
+//  Circle
+///////////////////////////////////////////////////////////////////////
+/**
+ * Circle constructor
+ * @constructor
+ * @augments Kinetic.Shape
+ * @param {Object} config
+ */
+Kinetic.Circle = Kinetic.Shape.extend("Kinetic.Circle", {},
+    {
+        init: function(config) {
+            this.setDefaultAttrs({
+                radius: 0
+            });
+
+            this.shapeType = "Circle";
+            config.drawFunc = this.drawFunc;
+
+            // call super constructor
+            this._super(config);
+        },
+        drawFunc: function(context) {
+            context.beginPath();
+            context.arc(0, 0, this.getRadius(), 0, Math.PI * 2, true);
+            context.closePath();
+            this.fill(context);
+            this.stroke(context);
+        }
+    }
+);
+
+// add getters setters
+Kinetic.Node.addGettersSetters(Kinetic.Circle, ['radius']);
+
+/**
+ * set radius
+ * @name setRadius
+ * @methodOf Kinetic.Circle.prototype
+ * @param {Number} radius
+ */
+
+/**
+ * get radius
+ * @name getRadius
+ * @methodOf Kinetic.Circle.prototype
+ */
+///////////////////////////////////////////////////////////////////////
+//  Rect
+///////////////////////////////////////////////////////////////////////
+/**
+ * Rect constructor
+ * @constructor
+ * @augments Kinetic.Shape
+ * @param {Object} config
+ */
+Kinetic.Rect = Kinetic.Shape.extend("Kinetic.Rect", {},
+    {
+        init: function(config) {
+            this.setDefaultAttrs({
+                width: 0,
+                height: 0,
+                cornerRadius: 0
+            });
+            this.shapeType = "Rect";
+            config.drawFunc = this.drawFunc;
+
+            this._super(config);
+        },
+        drawFunc: function(context) {
+            context.beginPath();
+            if(this.attrs.cornerRadius === 0) {
+                // simple rect - don't bother doing all that complicated maths stuff.
+                context.rect(0, 0, this.attrs.width, this.attrs.height);
+            }
+            else {
+                // arcTo would be nicer, but browser support is patchy (Opera)
+                context.moveTo(this.attrs.cornerRadius, 0);
+                context.lineTo(this.attrs.width - this.attrs.cornerRadius, 0);
+                context.arc(this.attrs.width - this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI * 3 / 2, 0, false);
+                context.lineTo(this.attrs.width, this.attrs.height - this.attrs.cornerRadius);
+                context.arc(this.attrs.width - this.attrs.cornerRadius, this.attrs.height - this.attrs.cornerRadius, this.attrs.cornerRadius, 0, Math.PI / 2, false);
+                context.lineTo(this.attrs.cornerRadius, this.attrs.height);
+                context.arc(this.attrs.cornerRadius, this.attrs.height - this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI / 2, Math.PI, false);
+                context.lineTo(0, this.attrs.cornerRadius);
+                context.arc(this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI, Math.PI * 3 / 2, false);
+            }
+            context.closePath();
+
+            this.fill(context);
+            this.stroke(context);
+        },
+        /**
+         * set width and height
+         * @name setSize
+         * @methodOf Kinetic.Rect.prototype
+         */
+        setSize: function() {
+            var size = Kinetic.Type._getSize(Array.prototype.slice.call(arguments));
+            this.setAttrs(size);
+        },
+        /**
+         * return rect size
+         * @name getSize
+         * @methodOf Kinetic.Rect.prototype
+         */
+        getSize: function() {
+            return {
+                width: this.attrs.width,
+                height: this.attrs.height
+            };
+        }
+    }
+);
+
+// add getters setters
+Kinetic.Node.addGettersSetters(Kinetic.Rect, ['width', 'height', 'cornerRadius']);
+
+/**
+ * set width
+ * @name setWidth
+ * @methodOf Kinetic.Rect.prototype
+ * @param {Number} width
+ */
+
+/**
+ * set height
+ * @name setHeight
+ * @methodOf Kinetic.Rect.prototype
+ * @param {Number} height
+ */
+
+/**
+ * set corner radius
+ * @name setCornerRadius
+ * @methodOf Kinetic.Rect.prototype
+ * @param {Number} radius
+ */
+
+/**
+ * get width
+ * @name getWidth
+ * @methodOf Kinetic.Rect.prototype
+ */
+
+/**
+ * get height
+ * @name getHeight
+ * @methodOf Kinetic.Rect.prototype
+ */
+
+/**
+ * get corner radius
+ * @name getCornerRadius
+ * @methodOf Kinetic.Rect.prototype
  */
 ///////////////////////////////////////////////////////////////////////
 //  Text
