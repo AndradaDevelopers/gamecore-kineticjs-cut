@@ -7,223 +7,221 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Text = function(config) {
-    this._initText(config);
-};
+Kinetic.Text = Kinetic.Shape.extend("Kinetic.Text", {},
+    //Instance methods
+    {
+        init: function(config) {
+            this.setDefaultAttrs({
+                fontFamily: 'Calibri',
+                text: '',
+                fontSize: 12,
+                align: 'left',
+                verticalAlign: 'top',
+                fontStyle: 'normal',
+                padding: 0,
+                width: 'auto',
+                height: 'auto',
+                detectionType: 'path',
+                cornerRadius: 0,
+                lineHeight: 1.2
+            });
 
-Kinetic.Text.prototype = {
-    _initText: function(config) {
-        this.setDefaultAttrs({
-            fontFamily: 'Calibri',
-            text: '',
-            fontSize: 12,
-            align: 'left',
-            verticalAlign: 'top',
-            fontStyle: 'normal',
-            padding: 0,
-            width: 'auto',
-            height: 'auto',
-            detectionType: 'path',
-            cornerRadius: 0,
-            lineHeight: 1.2
-        });
+            this.dummyCanvas = document.createElement('canvas');
+            this.shapeType = "Text";
 
-        this.dummyCanvas = document.createElement('canvas');
-        this.shapeType = "Text";
+            config.drawFunc = this.drawFunc;
+            // call super constructor
+            this._super(config);
 
-        config.drawFunc = this.drawFunc;
-        // call super constructor
-        Kinetic.Shape.call(this, config);
+            // update text data for certain attr changes
+            var attrs = ['fontFamily', 'fontSize', 'fontStyle', 'padding', 'align', 'lineHeight', 'text', 'width', 'height'];
+            var that = this;
+            for(var n = 0; n < attrs.length; n++) {
+                var attr = attrs[n];
+                this.on(attr + 'Change.kinetic', that._setTextData);
+            }
+            that._setTextData();
+        },
+        drawFunc: function(context) {
+            // draw rect
+            context.beginPath();
+            var boxWidth = this.getBoxWidth();
+            var boxHeight = this.getBoxHeight();
 
-        // update text data for certain attr changes
-        var attrs = ['fontFamily', 'fontSize', 'fontStyle', 'padding', 'align', 'lineHeight', 'text', 'width', 'height'];
-        var that = this;
-        for(var n = 0; n < attrs.length; n++) {
-            var attr = attrs[n];
-            this.on(attr + 'Change.kinetic', that._setTextData);
-        }
-        that._setTextData();
-    },
-    drawFunc: function(context) {
-        // draw rect
-        context.beginPath();
-        var boxWidth = this.getBoxWidth();
-        var boxHeight = this.getBoxHeight();
+            if(this.attrs.cornerRadius === 0) {
+                // simple rect - don't bother doing all that complicated maths stuff.
+                context.rect(0, 0, boxWidth, boxHeight);
+            }
+            else {
+                // arcTo would be nicer, but browser support is patchy (Opera)
+                context.moveTo(this.attrs.cornerRadius, 0);
+                context.lineTo(boxWidth - this.attrs.cornerRadius, 0);
+                context.arc(boxWidth - this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI * 3 / 2, 0, false);
+                context.lineTo(boxWidth, boxHeight - this.attrs.cornerRadius);
+                context.arc(boxWidth - this.attrs.cornerRadius, boxHeight - this.attrs.cornerRadius, this.attrs.cornerRadius, 0, Math.PI / 2, false);
+                context.lineTo(this.attrs.cornerRadius, boxHeight);
+                context.arc(this.attrs.cornerRadius, boxHeight - this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI / 2, Math.PI, false);
+                context.lineTo(0, this.attrs.cornerRadius);
+                context.arc(this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI, Math.PI * 3 / 2, false);
+            }
+            context.closePath();
 
-        if(this.attrs.cornerRadius === 0) {
-            // simple rect - don't bother doing all that complicated maths stuff.
-            context.rect(0, 0, boxWidth, boxHeight);
-        }
-        else {
-            // arcTo would be nicer, but browser support is patchy (Opera)
-            context.moveTo(this.attrs.cornerRadius, 0);
-            context.lineTo(boxWidth - this.attrs.cornerRadius, 0);
-            context.arc(boxWidth - this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI * 3 / 2, 0, false);
-            context.lineTo(boxWidth, boxHeight - this.attrs.cornerRadius);
-            context.arc(boxWidth - this.attrs.cornerRadius, boxHeight - this.attrs.cornerRadius, this.attrs.cornerRadius, 0, Math.PI / 2, false);
-            context.lineTo(this.attrs.cornerRadius, boxHeight);
-            context.arc(this.attrs.cornerRadius, boxHeight - this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI / 2, Math.PI, false);
-            context.lineTo(0, this.attrs.cornerRadius);
-            context.arc(this.attrs.cornerRadius, this.attrs.cornerRadius, this.attrs.cornerRadius, Math.PI, Math.PI * 3 / 2, false);
-        }
-        context.closePath();
-
-        this.fill(context);
-        this.stroke(context);
-        /*
-         * draw text
-         */
-        var p = this.attrs.padding;
-        var lineHeightPx = this.attrs.lineHeight * this.getTextHeight();
-        var textArr = this.textArr;
-
-        context.font = this.attrs.fontStyle + ' ' + this.attrs.fontSize + 'pt ' + this.attrs.fontFamily;
-        context.textBaseline = 'middle';
-        context.textAlign = 'left';
-        context.save();
-        context.translate(p, 0);
-        context.translate(0, p + this.getTextHeight() / 2);
-
-        // draw text lines
-        var appliedShadow = this.appliedShadow;
-        for(var n = 0; n < textArr.length; n++) {
-            var text = textArr[n];
+            this.fill(context);
+            this.stroke(context);
             /*
-             * need to reset appliedShadow flag so that shadows
-             * are appropriately applied to each line of text
+             * draw text
              */
-            this.appliedShadow = appliedShadow;
+            var p = this.attrs.padding;
+            var lineHeightPx = this.attrs.lineHeight * this.getTextHeight();
+            var textArr = this.textArr;
 
-            // horizontal alignment
+            context.font = this.attrs.fontStyle + ' ' + this.attrs.fontSize + 'pt ' + this.attrs.fontFamily;
+            context.textBaseline = 'middle';
+            context.textAlign = 'left';
             context.save();
-            if(this.attrs.align === 'right') {
-                context.translate(this.getBoxWidth() - this._getTextSize(text).width - p * 2, 0);
-            }
-            else if(this.attrs.align === 'center') {
-                context.translate((this.getBoxWidth() - this._getTextSize(text).width - p * 2) / 2, 0);
-            }
+            context.translate(p, 0);
+            context.translate(0, p + this.getTextHeight() / 2);
 
-            this.fillText(context, text);
-            this.strokeText(context, text);
+            // draw text lines
+            var appliedShadow = this.appliedShadow;
+            for(var n = 0; n < textArr.length; n++) {
+                var text = textArr[n];
+                /*
+                 * need to reset appliedShadow flag so that shadows
+                 * are appropriately applied to each line of text
+                 */
+                this.appliedShadow = appliedShadow;
+
+                // horizontal alignment
+                context.save();
+                if(this.attrs.align === 'right') {
+                    context.translate(this.getBoxWidth() - this._getTextSize(text).width - p * 2, 0);
+                }
+                else if(this.attrs.align === 'center') {
+                    context.translate((this.getBoxWidth() - this._getTextSize(text).width - p * 2) / 2, 0);
+                }
+
+                this.fillText(context, text);
+                this.strokeText(context, text);
+                context.restore();
+
+                context.translate(0, lineHeightPx);
+            }
             context.restore();
+        },
+        /**
+         * get box width
+         * @name getBoxWidth
+         * @methodOf Kinetic.Text.prototype
+         */
+        getBoxWidth: function() {
+            return this.attrs.width === 'auto' ? this.getTextWidth() + this.attrs.padding * 2 : this.attrs.width;
+        },
+        /**
+         * get box height
+         * @name getBoxHeight
+         * @methodOf Kinetic.Text.prototype
+         */
+        getBoxHeight: function() {
+            return this.attrs.height === 'auto' ? (this.getTextHeight() * this.textArr.length * this.attrs.lineHeight) + this.attrs.padding * 2 : this.attrs.height;
+        },
+        /**
+         * get text width in pixels
+         * @name getTextWidth
+         * @methodOf Kinetic.Text.prototype
+         */
+        getTextWidth: function() {
+            return this.textWidth;
+        },
+        /**
+         * get text height in pixels
+         * @name getTextHeight
+         * @methodOf Kinetic.Text.prototype
+         */
+        getTextHeight: function() {
+            return this.textHeight;
+        },
+        _getTextSize: function(text) {
+            var dummyCanvas = this.dummyCanvas;
+            var context = dummyCanvas.getContext('2d');
 
-            context.translate(0, lineHeightPx);
-        }
-        context.restore();
-    },
-    /**
-     * get box width
-     * @name getBoxWidth
-     * @methodOf Kinetic.Text.prototype
-     */
-    getBoxWidth: function() {
-        return this.attrs.width === 'auto' ? this.getTextWidth() + this.attrs.padding * 2 : this.attrs.width;
-    },
-    /**
-     * get box height
-     * @name getBoxHeight
-     * @methodOf Kinetic.Text.prototype
-     */
-    getBoxHeight: function() {
-        return this.attrs.height === 'auto' ? (this.getTextHeight() * this.textArr.length * this.attrs.lineHeight) + this.attrs.padding * 2 : this.attrs.height;
-    },
-    /**
-     * get text width in pixels
-     * @name getTextWidth
-     * @methodOf Kinetic.Text.prototype
-     */
-    getTextWidth: function() {
-        return this.textWidth;
-    },
-    /**
-     * get text height in pixels
-     * @name getTextHeight
-     * @methodOf Kinetic.Text.prototype
-     */
-    getTextHeight: function() {
-        return this.textHeight;
-    },
-    _getTextSize: function(text) {
-        var dummyCanvas = this.dummyCanvas;
-        var context = dummyCanvas.getContext('2d');
+            context.save();
+            context.font = this.attrs.fontStyle + ' ' + this.attrs.fontSize + 'pt ' + this.attrs.fontFamily;
+            var metrics = context.measureText(text);
+            context.restore();
+            return {
+                width: metrics.width,
+                height: parseInt(this.attrs.fontSize, 10)
+            };
+        },
+        /**
+         * set text data.  wrap logic and width and height setting occurs
+         * here
+         */
+        _setTextData: function() {
+            var charArr = this.attrs.text.split('');
+            var arr = [];
+            var row = 0;
+            var addLine = true;
+            this.textWidth = 0;
+            this.textHeight = this._getTextSize(this.attrs.text).height;
+            var lineHeightPx = this.attrs.lineHeight * this.textHeight;
+            while(charArr.length > 0 && addLine && (this.attrs.height === 'auto' || lineHeightPx * (row + 1) < this.attrs.height - this.attrs.padding * 2)) {
+                var index = 0;
+                var line = undefined;
+                addLine = false;
 
-        context.save();
-        context.font = this.attrs.fontStyle + ' ' + this.attrs.fontSize + 'pt ' + this.attrs.fontFamily;
-        var metrics = context.measureText(text);
-        context.restore();
-        return {
-            width: metrics.width,
-            height: parseInt(this.attrs.fontSize, 10)
-        };
-    },
-    /**
-     * set text data.  wrap logic and width and height setting occurs
-     * here
-     */
-    _setTextData: function() {
-        var charArr = this.attrs.text.split('');
-        var arr = [];
-        var row = 0;
-        var addLine = true;
-        this.textWidth = 0;
-        this.textHeight = this._getTextSize(this.attrs.text).height;
-        var lineHeightPx = this.attrs.lineHeight * this.textHeight;
-        while(charArr.length > 0 && addLine && (this.attrs.height === 'auto' || lineHeightPx * (row + 1) < this.attrs.height - this.attrs.padding * 2)) {
-            var index = 0;
-            var line = undefined;
-            addLine = false;
-
-            while(index < charArr.length) {
-                if(charArr.indexOf('\n') === index) {
-                    // remove newline char
-                    charArr.splice(index, 1);
-                    line = charArr.splice(0, index).join('');
-                    break;
-                }
-
-                // if line exceeds inner box width
-                var lineArr = charArr.slice(0, index);
-                if(this.attrs.width !== 'auto' && this._getTextSize(lineArr.join('')).width > this.attrs.width - this.attrs.padding * 2) {
-                    /*
-                     * if a single character is too large to fit inside
-                     * the text box width, then break out of the loop
-                     * and stop processing
-                     */
-                    if(index == 0) {
+                while(index < charArr.length) {
+                    if(charArr.indexOf('\n') === index) {
+                        // remove newline char
+                        charArr.splice(index, 1);
+                        line = charArr.splice(0, index).join('');
                         break;
                     }
-                    var lastSpace = lineArr.lastIndexOf(' ');
-                    var lastDash = lineArr.lastIndexOf('-');
-                    var wrapIndex = Math.max(lastSpace, lastDash);
-                    if(wrapIndex >= 0) {
-                        line = charArr.splice(0, 1 + wrapIndex).join('');
+
+                    // if line exceeds inner box width
+                    var lineArr = charArr.slice(0, index);
+                    if(this.attrs.width !== 'auto' && this._getTextSize(lineArr.join('')).width > this.attrs.width - this.attrs.padding * 2) {
+                        /*
+                         * if a single character is too large to fit inside
+                         * the text box width, then break out of the loop
+                         * and stop processing
+                         */
+                        if(index == 0) {
+                            break;
+                        }
+                        var lastSpace = lineArr.lastIndexOf(' ');
+                        var lastDash = lineArr.lastIndexOf('-');
+                        var wrapIndex = Math.max(lastSpace, lastDash);
+                        if(wrapIndex >= 0) {
+                            line = charArr.splice(0, 1 + wrapIndex).join('');
+                            break;
+                        }
+                        /*
+                         * if not able to word wrap based on space or dash,
+                         * go ahead and wrap in the middle of a word if needed
+                         */
+                        line = charArr.splice(0, index).join('');
                         break;
                     }
-                    /*
-                     * if not able to word wrap based on space or dash,
-                     * go ahead and wrap in the middle of a word if needed
-                     */
-                    line = charArr.splice(0, index).join('');
-                    break;
-                }
-                index++;
+                    index++;
 
-                // if the end is reached
-                if(index === charArr.length) {
-                    line = charArr.splice(0, index).join('');
+                    // if the end is reached
+                    if(index === charArr.length) {
+                        line = charArr.splice(0, index).join('');
+                    }
                 }
+                this.textWidth = Math.max(this.textWidth, this._getTextSize(line).width);
+                if(line !== undefined) {
+                    arr.push(line);
+                    addLine = true;
+                }
+                row++;
             }
-            this.textWidth = Math.max(this.textWidth, this._getTextSize(line).width);
-            if(line !== undefined) {
-                arr.push(line);
-                addLine = true;
-            }
-            row++;
+            this.textArr = arr;
         }
-        this.textArr = arr;
     }
-};
-Kinetic.Global.extend(Kinetic.Text, Kinetic.Shape);
+);
 
 // add getters setters
 Kinetic.Node.addGettersSetters(Kinetic.Text, ['fontFamily', 'fontSize', 'fontStyle', 'textFill', 'textStroke', 'textStrokeWidth', 'padding', 'align', 'lineHeight', 'text', 'width', 'height', 'cornerRadius', 'fill', 'stroke', 'strokeWidth', 'shadow']);

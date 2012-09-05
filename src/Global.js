@@ -6,7 +6,6 @@
  * @namespace
  */
 var Kinetic = {};
-Kinetic.Filters = {};
 Kinetic.Plugins = {};
 Kinetic.Global = {
     BUBBLE_WHITELIST: ['mousedown', 'mousemove', 'mouseup', 'mouseover', 'mouseout', 'click', 'dblclick', 'touchstart', 'touchmove', 'touchend', 'tap', 'dbltap', 'dragstart', 'dragmove', 'dragend'],
@@ -29,13 +28,6 @@ Kinetic.Global = {
     warn: function(str) {
         if(console && console.warn) {
             console.warn('Kinetic warning: ' + str);
-        }
-    },
-    extend: function(c1, c2) {
-        for(var key in c2.prototype) {
-            if(!( key in c1.prototype)) {
-                c1.prototype[key] = c2.prototype[key];
-            }
         }
     },
     _pullNodes: function(stage) {

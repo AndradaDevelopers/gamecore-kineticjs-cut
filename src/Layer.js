@@ -33,165 +33,161 @@
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Layer = function(config) {
-    this._initLayer(config);
-};
+Kinetic.Layer = Kinetic.Container.extend("Kinetic.Layer", {},
+    //Instance methods
+    {
+        init: function(config){
+            this.setDefaultAttrs({
+                clearBeforeDraw: true
+            });
 
-Kinetic.Layer.prototype = {
-    _initLayer: function(config) {
-        this.setDefaultAttrs({
-            clearBeforeDraw: true
-        });
-
-        this.nodeType = 'Layer';
-        this.beforeDrawFunc = undefined;
-        this.afterDrawFunc = undefined;
-        this.canvas = new Kinetic.Canvas();
-        this.canvas.getElement().style.position = 'absolute';
-        this.bufferCanvas = new Kinetic.Canvas();
-        this.bufferCanvas.name = 'buffer';
-
-        // call super constructor
-        Kinetic.Container.call(this, config);
-    },
-    /**
-     * draw children nodes.  this includes any groups
-     *  or shapes
-     * @name draw
-     * @methodOf Kinetic.Layer.prototype
-     */
-    draw: function(canvas) {
-        // before draw  handler
-        if(this.beforeDrawFunc !== undefined) {
-            this.beforeDrawFunc.call(this);
-        }
-
-        if(canvas) {
-            this._draw(canvas);
-        }
-        else {
-            this._draw(this.getCanvas());
-            this._draw(this.bufferCanvas);
-        }
-
-        // after draw  handler
-        if(this.afterDrawFunc !== undefined) {
-            this.afterDrawFunc.call(this);
-        }
-    },
-    /**
-     * draw children nodes on buffer.  this includes any groups
-     *  or shapes
-     * @name drawBuffer
-     * @methodOf Kinetic.Layer.prototype
-     */
-    drawBuffer: function() {
-        this.draw(this.bufferCanvas);
-    },
-    /**
-     * draw children nodes on scene.  this includes any groups
-     *  or shapes
-     * @name drawScene
-     * @methodOf Kinetic.Layer.prototype
-     */
-    drawScene: function() {
-        this.draw(this.getCanvas());
-    },
-    /**
-     * set before draw handler
-     * @name beforeDraw
-     * @methodOf Kinetic.Layer.prototype
-     * @param {Function} handler
-     */
-    beforeDraw: function(func) {
-        this.beforeDrawFunc = func;
-    },
-    /**
-     * set after draw handler
-     * @name afterDraw
-     * @methodOf Kinetic.Layer.prototype
-     * @param {Function} handler
-     */
-    afterDraw: function(func) {
-        this.afterDrawFunc = func;
-    },
-    /**
-     * get layer canvas
-     * @name getCanvas
-     * @methodOf Kinetic.Layer.prototype
-     */
-    getCanvas: function() {
-        return this.canvas;
-    },
-    /**
-     * get layer canvas context
-     * @name getContext
-     * @methodOf Kinetic.Layer.prototype
-     */
-    getContext: function() {
-        return this.canvas.context;
-    },
-    /**
-     * clear canvas tied to the layer
-     * @name clear
-     * @methodOf Kinetic.Layer.prototype
-     */
-    clear: function() {
-        this.getCanvas().clear();
-    },
-    /**
-     * Creates a composite data URL. If MIME type is not
-     *  specified, then "image/png" will result. For "image/jpeg", specify a quality
-     *  level as quality (range 0.0 - 1.0).  Note that this method works
-     *  differently from toDataURL() for other nodes because it generates an absolute dataURL
-     *  based on what's draw on the layer, rather than drawing
-     *  the current state of each child node
-     * @name toDataURL
-     * @methodOf Kinetic.Layer.prototype
-     * @param {Object} config
-     * @param {String} [config.mimeType] mime type.  can be "image/png" or "image/jpeg".
-     *  "image/png" is the default
-     * @param {Number} [config.width] data url image width
-     * @param {Number} [config.height] data url image height
-     * @param {Number} [config.quality] jpeg quality.  If using an "image/jpeg" mimeType,
-     *  you can specify the quality from 0 to 1, where 0 is very poor quality and 1
-     *  is very high quality
-     */
-    toDataURL: function(config) {
-        var canvas;
-        var mimeType = config && config.mimeType ? config.mimeType : null;
-        var quality = config && config.quality ? config.quality : null;
-
-        if(config && config.width && config.height) {
-            canvas = new Kinetic.Canvas(config.width, config.height);
-        }
-        else {
-            canvas = this.getCanvas();
-        }
-        return canvas.toDataURL(mimeType, quality);
-    },
-    /**
-     * remove layer from stage
-     */
-    _remove: function() {
-        /*
-         * remove canvas DOM from the document if
-         * it exists
+            this.nodeType = 'Layer';
+            this.beforeDrawFunc = undefined;
+            this.afterDrawFunc = undefined;
+            this.canvas = new Kinetic.Canvas();
+            this.canvas.getElement().style.position = 'absolute';
+            this.bufferCanvas = new Kinetic.Canvas();
+            this.bufferCanvas.name = 'buffer';
+            this._super(config);
+        },
+        /**
+         * draw children nodes.  this includes any groups
+         *  or shapes
+         * @name draw
+         * @methodOf Kinetic.Layer.prototype
          */
-        try {
-            this.getStage().content.removeChild(this.canvas.element);
-        }
-        catch(e) {
-            Kinetic.Global.warn('unable to remove layer scene canvas element from the document');
-        }
-    },
-    __draw: function(canvas) {
-        if(this.attrs.clearBeforeDraw) {
-            canvas.clear();
+        draw: function(canvas) {
+            // before draw  handler
+            if(this.beforeDrawFunc !== undefined) {
+                this.beforeDrawFunc.call(this);
+            }
+
+            if(canvas) {
+                this._draw(canvas);
+            }
+            else {
+                this._draw(this.getCanvas());
+                this._draw(this.bufferCanvas);
+            }
+
+            // after draw  handler
+            if(this.afterDrawFunc !== undefined) {
+                this.afterDrawFunc.call(this);
+            }
+        },
+        /**
+         * draw children nodes on buffer.  this includes any groups
+         *  or shapes
+         * @name drawBuffer
+         * @methodOf Kinetic.Layer.prototype
+         */
+        drawBuffer: function() {
+            this.draw(this.bufferCanvas);
+        },
+        /**
+         * draw children nodes on scene.  this includes any groups
+         *  or shapes
+         * @name drawScene
+         * @methodOf Kinetic.Layer.prototype
+         */
+        drawScene: function() {
+            this.draw(this.getCanvas());
+        },
+        /**
+         * set before draw handler
+         * @name beforeDraw
+         * @methodOf Kinetic.Layer.prototype
+         * @param {Function} handler
+         */
+        beforeDraw: function(func) {
+            this.beforeDrawFunc = func;
+        },
+        /**
+         * set after draw handler
+         * @name afterDraw
+         * @methodOf Kinetic.Layer.prototype
+         * @param {Function} handler
+         */
+        afterDraw: function(func) {
+            this.afterDrawFunc = func;
+        },
+        /**
+         * get layer canvas
+         * @name getCanvas
+         * @methodOf Kinetic.Layer.prototype
+         */
+        getCanvas: function() {
+            return this.canvas;
+        },
+        /**
+         * get layer canvas context
+         * @name getContext
+         * @methodOf Kinetic.Layer.prototype
+         */
+        getContext: function() {
+            return this.canvas.context;
+        },
+        /**
+         * clear canvas tied to the layer
+         * @name clear
+         * @methodOf Kinetic.Layer.prototype
+         */
+        clear: function() {
+            this.getCanvas().clear();
+        },
+        /**
+         * Creates a composite data URL. If MIME type is not
+         *  specified, then "image/png" will result. For "image/jpeg", specify a quality
+         *  level as quality (range 0.0 - 1.0).  Note that this method works
+         *  differently from toDataURL() for other nodes because it generates an absolute dataURL
+         *  based on what's draw on the layer, rather than drawing
+         *  the current state of each child node
+         * @name toDataURL
+         * @methodOf Kinetic.Layer.prototype
+         * @param {Object} config
+         * @param {String} [config.mimeType] mime type.  can be "image/png" or "image/jpeg".
+         *  "image/png" is the default
+         * @param {Number} [config.width] data url image width
+         * @param {Number} [config.height] data url image height
+         * @param {Number} [config.quality] jpeg quality.  If using an "image/jpeg" mimeType,
+         *  you can specify the quality from 0 to 1, where 0 is very poor quality and 1
+         *  is very high quality
+         */
+        toDataURL: function(config) {
+            var canvas;
+            var mimeType = config && config.mimeType ? config.mimeType : null;
+            var quality = config && config.quality ? config.quality : null;
+
+            if(config && config.width && config.height) {
+                canvas = new Kinetic.Canvas(config.width, config.height);
+            }
+            else {
+                canvas = this.getCanvas();
+            }
+            return canvas.toDataURL(mimeType, quality);
+        },
+        /**
+         * remove layer from stage
+         */
+        _remove: function() {
+            /*
+             * remove canvas DOM from the document if
+             * it exists
+             */
+            try {
+                this.getStage().content.removeChild(this.canvas.element);
+            }
+            catch(e) {
+                Kinetic.Global.warn('unable to remove layer scene canvas element from the document');
+            }
+        },
+        __draw: function(canvas) {
+            if(this.attrs.clearBeforeDraw) {
+                canvas.clear();
+            }
         }
     }
-};
-Kinetic.Global.extend(Kinetic.Layer, Kinetic.Container);
+);
 
 // add getters and setters
 Kinetic.Node.addGettersSetters(Kinetic.Layer, ['clearBeforeDraw']);
