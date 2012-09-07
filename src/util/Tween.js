@@ -7,7 +7,7 @@
 * an animation of a single Node property.  A Transition is a set of
 * multiple tweens
 */
-Kinetic.Tween = gamecore.Base.extend("Kinetic.Tween", 
+gamecore.Base.extend("Kinetic.Tween", 
     //Static properties
     {},
     //Instance methods

@@ -11,7 +11,8 @@
  * @param {Number} [config.height]
  * @param {Object} [config.crop]
  */
-Kinetic.Image = Kinetic.Shape.extend("Kinetic.Image", {},
+
+ Kinetic.Shape.extend("Kinetic.Image", {},
     //Instance methods
     {
         init: function(config) {

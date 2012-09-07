@@ -33,7 +33,7 @@
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Layer = Kinetic.Container.extend("Kinetic.Layer", {},
+Kinetic.Container.extend("Kinetic.Layer", {},
     //Instance methods
     {
         init: function(config){

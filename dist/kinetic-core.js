@@ -3,7 +3,7 @@
  * http://www.kineticjs.com/
  * Copyright 2012, Eric Rowell
  * Licensed under the MIT or GPL Version 2 licenses.
- * Date: Sep 05 2012
+ * Date: Sep 07 2012
  *
  * Copyright (C) 2011 - 2012 by Eric Rowell
  *
@@ -86,7 +86,7 @@ Kinetic.Global = {
  *  to stop, resume, or restart the transition
  * @constructor
  */
-Kinetic.Transition = gamecore.Base.extend("Kinetic.Transition", {},
+gamecore.Base.extend("Kinetic.Transition", {},
     //Instance methods
     {
         init: function(node, config) {
@@ -185,7 +185,7 @@ Kinetic.Transition = gamecore.Base.extend("Kinetic.Transition", {},
  * utilities that determine data type and transform
  * one type into another
  */
-Kinetic.Type = gamecore.Base.extend("Kinetic.Type", 
+gamecore.Base.extend("Kinetic.Type", 
     //Static methods
     {
         /*
@@ -463,7 +463,7 @@ Kinetic.Type = gamecore.Base.extend("Kinetic.Type",
  * @param {Number} width
  * @param {Number} height
  */
-Kinetic.Canvas = gamecore.Base.extend("Kinetic.Canvas", {}, 
+gamecore.Base.extend("Kinetic.Canvas", {}, 
     //Instance methods
     {
         init: function(width, height) {
@@ -565,7 +565,7 @@ Kinetic.Canvas = gamecore.Base.extend("Kinetic.Canvas", {},
 * an animation of a single Node property.  A Transition is a set of
 * multiple tweens
 */
-Kinetic.Tween = gamecore.Base.extend("Kinetic.Tween", 
+gamecore.Base.extend("Kinetic.Tween", 
     //Static properties
     {},
     //Instance methods
@@ -914,7 +914,7 @@ Kinetic.Tweens =
  * class.
  */
 
-Kinetic.Transform = gamecore.Base.extend("Kinetic.Transform", {}, 
+gamecore.Base.extend("Kinetic.Transform", {}, 
     //Instance methods
     {
         init: function() {
@@ -1026,7 +1026,7 @@ Kinetic.Transform = gamecore.Base.extend("Kinetic.Transform", {},
  * @param {Object} config
  * @param {Function} config.func function to be executed on each animation frame
  */
-Kinetic.Animation = gamecore.Base.extend("Kinetic.Animation", 
+gamecore.Base.extend("Kinetic.Animation", 
     //Static methods
     {
         animations: [],
@@ -1178,7 +1178,7 @@ requestAnimFrame = (function(callback) {
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Node = gamecore.Base.extend("Kinetic.Node", 
+gamecore.Base.extend("Kinetic.Node", 
     //Static methods
     {
         // add getter and setter methods
@@ -2443,7 +2443,7 @@ Kinetic.Node.addSetters(Kinetic.Node, ['rotationDeg']);
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Container = Kinetic.Node.extend("Kinetic.Container", 
+Kinetic.Node.extend("Kinetic.Container", 
     //Static methods
     {
     },
@@ -2689,7 +2689,7 @@ Kinetic.Container = Kinetic.Node.extend("Kinetic.Container",
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Stage = Kinetic.Container.extend("Kinetic.Stage", {},
+Kinetic.Container.extend("Kinetic.Stage", {},
     //Instance methods
     {
         init: function(config) {
@@ -3522,7 +3522,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Stage, ['width', 'height']);
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Layer = Kinetic.Container.extend("Kinetic.Layer", {},
+Kinetic.Container.extend("Kinetic.Layer", {},
     //Instance methods
     {
         init: function(config){
@@ -3727,7 +3727,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Layer, ['clearBeforeDraw']);
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Group = Kinetic.Container.extend("Kinetic.Group", {}, 
+Kinetic.Container.extend("Kinetic.Group", {}, 
 	//Instance methods
 	{
 		init: function(config) {
@@ -3797,7 +3797,7 @@ Kinetic.Group = Kinetic.Container.extend("Kinetic.Group", {},
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Shape = Kinetic.Node.extend("Kinetic.Shape", {},
+Kinetic.Node.extend("Kinetic.Shape", {},
     //Instance methods
     {
         init: function(config){
@@ -4254,7 +4254,8 @@ Kinetic.Node.addGettersSetters(Kinetic.Shape, ['fill', 'stroke', 'lineJoin', 'st
  * @param {Number} [config.height]
  * @param {Object} [config.crop]
  */
-Kinetic.Image = Kinetic.Shape.extend("Kinetic.Image", {},
+
+ Kinetic.Shape.extend("Kinetic.Image", {},
     //Instance methods
     {
         init: function(config) {
@@ -4481,7 +4482,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Image, ['image', 'crop', 'filter', 'width
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Circle = Kinetic.Shape.extend("Kinetic.Circle", {},
+Kinetic.Shape.extend("Kinetic.Circle", {},
     {
         init: function(config) {
             this.setDefaultAttrs({
@@ -4528,7 +4529,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Circle, ['radius']);
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Rect = Kinetic.Shape.extend("Kinetic.Rect", {},
+Kinetic.Shape.extend("Kinetic.Rect", {},
     {
         init: function(config) {
             this.setDefaultAttrs({
@@ -4637,7 +4638,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Rect, ['width', 'height', 'cornerRadius']
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Text = Kinetic.Shape.extend("Kinetic.Text", {},
+Kinetic.Shape.extend("Kinetic.Text", {},
     //Instance methods
     {
         init: function(config) {
@@ -5033,7 +5034,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Text, ['fontFamily', 'fontSize', 'fontSty
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Sprite = Kinetic.Shape.extend("Kinetic.Sprite", {},
+Kinetic.Shape.extend("Kinetic.Sprite", {},
     //Instance methods
     {
         init: function(config) {
@@ -5186,7 +5187,7 @@ Kinetic.Node.addGettersSetters(Kinetic.Sprite, ['animation', 'animations', 'inde
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.TextPath = Kinetic.Shape.extend("Kinetic.TextPath", {},
+Kinetic.Shape.extend("Kinetic.TextPath", {},
     //Instance methods
     {
         init: function(config) {

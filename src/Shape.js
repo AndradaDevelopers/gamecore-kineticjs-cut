@@ -59,7 +59,7 @@
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Shape = Kinetic.Node.extend("Kinetic.Shape", {},
+Kinetic.Node.extend("Kinetic.Shape", {},
     //Instance methods
     {
         init: function(config){

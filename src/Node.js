@@ -31,7 +31,7 @@
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Node = gamecore.Base.extend("Kinetic.Node", 
+gamecore.Base.extend("Kinetic.Node", 
     //Static methods
     {
         // add getter and setter methods

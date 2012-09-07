@@ -7,7 +7,7 @@
  *  to stop, resume, or restart the transition
  * @constructor
  */
-Kinetic.Transition = gamecore.Base.extend("Kinetic.Transition", {},
+gamecore.Base.extend("Kinetic.Transition", {},
     //Instance methods
     {
         init: function(node, config) {

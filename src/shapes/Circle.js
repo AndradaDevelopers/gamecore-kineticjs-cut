@@ -7,7 +7,7 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Circle = Kinetic.Shape.extend("Kinetic.Circle", {},
+Kinetic.Shape.extend("Kinetic.Circle", {},
     {
         init: function(config) {
             this.setDefaultAttrs({

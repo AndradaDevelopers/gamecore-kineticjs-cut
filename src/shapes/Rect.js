@@ -7,7 +7,7 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Rect = Kinetic.Shape.extend("Kinetic.Rect", {},
+Kinetic.Shape.extend("Kinetic.Rect", {},
     {
         init: function(config) {
             this.setDefaultAttrs({

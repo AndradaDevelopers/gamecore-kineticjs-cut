@@ -8,7 +8,7 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.TextPath = Kinetic.Shape.extend("Kinetic.TextPath", {},
+Kinetic.Shape.extend("Kinetic.TextPath", {},
     //Instance methods
     {
         init: function(config) {

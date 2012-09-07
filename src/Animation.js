@@ -9,7 +9,7 @@
  * @param {Object} config
  * @param {Function} config.func function to be executed on each animation frame
  */
-Kinetic.Animation = gamecore.Base.extend("Kinetic.Animation", 
+gamecore.Base.extend("Kinetic.Animation", 
     //Static methods
     {
         animations: [],

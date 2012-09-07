@@ -7,7 +7,7 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Text = Kinetic.Shape.extend("Kinetic.Text", {},
+Kinetic.Shape.extend("Kinetic.Text", {},
     //Instance methods
     {
         init: function(config) {

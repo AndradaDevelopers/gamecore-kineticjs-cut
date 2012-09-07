@@ -5,7 +5,7 @@
  * utilities that determine data type and transform
  * one type into another
  */
-Kinetic.Type = gamecore.Base.extend("Kinetic.Type", 
+gamecore.Base.extend("Kinetic.Type", 
     //Static methods
     {
         /*

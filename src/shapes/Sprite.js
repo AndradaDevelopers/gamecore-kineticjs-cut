@@ -7,7 +7,7 @@
  * @augments Kinetic.Shape
  * @param {Object} config
  */
-Kinetic.Sprite = Kinetic.Shape.extend("Kinetic.Sprite", {},
+Kinetic.Shape.extend("Kinetic.Sprite", {},
     //Instance methods
     {
         init: function(config) {

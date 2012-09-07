@@ -30,7 +30,7 @@
  * @param {Number} [config.dragBounds.bottom]
  * @param {Number} [config.dragBounds.left]
  */
-Kinetic.Container = Kinetic.Node.extend("Kinetic.Container", 
+Kinetic.Node.extend("Kinetic.Container", 
     //Static methods
     {
     },

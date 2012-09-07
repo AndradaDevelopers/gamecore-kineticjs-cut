@@ -7,7 +7,7 @@
  * @param {Number} width
  * @param {Number} height
  */
-Kinetic.Canvas = gamecore.Base.extend("Kinetic.Canvas", {}, 
+gamecore.Base.extend("Kinetic.Canvas", {}, 
     //Instance methods
     {
         init: function(width, height) {

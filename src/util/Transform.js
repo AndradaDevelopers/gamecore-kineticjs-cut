@@ -17,7 +17,7 @@
  * class.
  */
 
-Kinetic.Transform = gamecore.Base.extend("Kinetic.Transform", {}, 
+gamecore.Base.extend("Kinetic.Transform", {}, 
     //Instance methods
     {
         init: function() {
